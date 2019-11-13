@@ -40,7 +40,7 @@ class CornerPieces:
         xy, xz, yz = self.color
 
         if ins_strip in ('U', 'D', 'E', 'u', 'd', 'y'):
-            if (x, y) != (0, 0):  # 中心块不改变
+            if (x, y) != (0, 0):  # 中心块pos不改变
                 res = self.__judge(UD, (x, y), z, (xz, yz))
                 if res:
                     x, y = res[0]
