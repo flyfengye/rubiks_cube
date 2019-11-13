@@ -2,20 +2,16 @@ from check_tuple import UD
 from check_tuple import RL
 from check_tuple import FB
 
-default = [['ABE', 'BE', 'BCE', 'CE', 'CDE', 'DE', 'DAE', 'AE', 'E'],
-           ['AB', 'B', 'BC', 'C', 'CD', 'D', 'DA', 'A', ''],
-           ['ABF', 'BF', 'BCF', 'CF', 'CDF', 'DF', 'DAF', 'AF', 'F']]
-
 
 class CornerPieces:
     pos_order = ((1, 1), (1, -1), (-1, -1), (-1, 1))
 
-    def __init__(self):
-        self.position_default = (1, 1, 1)
-        self.position = (1, 1, 1)
+    def __init__(self, position_default, color_default):
+        self.position_default = position_default
+        self.position = position_default
 
-        self.color_default = ('u', 'f', 'r')
-        self.color = ('u', 'f', 'r')
+        self.color_default = color_default
+        self.color = color_default
 
         self.ins_str = ''
 
@@ -44,22 +40,25 @@ class CornerPieces:
         xy, xz, yz = self.color
 
         if ins_strip in ('U', 'D', 'E', 'u', 'd', 'y'):
-            res = self.__judge(UD, (x, y), z, (xz, yz))
-            if res:
-                x, y = res[0]
-                xz, yz = res[1]
+            if (x, y) != (0, 0):  # 中心块不改变
+                res = self.__judge(UD, (x, y), z, (xz, yz))
+                if res:
+                    x, y = res[0]
+                    xz, yz = res[1]
 
         elif ins_strip in ('R', 'L', 'M', 'r', 'l', 'x'):
-            res = self.__judge(RL, (y, z), x, (xy, xz))
-            if res:
-                y, z = res[0]
-                xy, xz = res[1]
+            if (y, z) != (0, 0):
+                res = self.__judge(RL, (y, z), x, (xy, xz))
+                if res:
+                    y, z = res[0]
+                    xy, xz = res[1]
 
         elif ins_strip in ('B', 'F', 'S', 'b', 'f', 'z'):
-            res = self.__judge(FB, (x, z), y, (xy, yz))
-            if res:
-                x, z = res[0]
-                xy, yz = res[1]
+            if (x, z) != (0, 0):
+                res = self.__judge(FB, (x, z), y, (xy, yz))
+                if res:
+                    x, z = res[0]
+                    xy, yz = res[1]
 
         else:
             raise Exception('ins_str Error')  # 若检查了ins_str则不会报错
@@ -69,6 +68,10 @@ class CornerPieces:
 
     def __planar_pos(self, pos, turn_count=1, clockwise=True):  # 后需对参数进行删减必要时写成实例变量
         pos_order = self.pos_order
+        # print(self.__class__)#debug
+        # print(pos_order)
+        # print(pos)
+        # print(self.position)
         if clockwise is True:
             return pos_order[(pos_order.index(pos) + turn_count) % 4]
         else:
@@ -105,10 +108,75 @@ class CenterPieces(EdgePieces):
     pass
 
 
+class RubikS:
+    def __init__(self):
+        self.all_pieces = self.__init_all_pieces()
+
+    @staticmethod
+    def __init_all_pieces():
+        u, d, f, b, r, _l = (0, 'u', 1), (0, 'd', -1), (1, 'f', -1), (1, 'b', 1), (2, 'r', 1), (2, 'l', -1)
+
+        cor_grp = ((u, d), ((b, f), (r, _l)))
+        edg_grp1 = ((u, d), (b, f, r, _l))
+        edg_grp2 = ((b, f), (r, _l))
+        cet_grp = (u, d, b, f, r, _l)
+        cor_grp = tuple((i, m, n) for n in cor_grp[1][1] for m in cor_grp[1][0] for i in cor_grp[0])
+        edg_grp = tuple((i, j) for j in edg_grp1[1] for i in edg_grp1[0]) + \
+            tuple((i, j) for j in edg_grp2[1] for i in edg_grp2[0])
+
+        def get_pc(dft, index, *args):
+            _pc = [dft] * 3
+            for arg in args:
+                _pc[arg[0]] = arg[index]
+            if dft == 0:
+                _pc.reverse()
+            return tuple(_pc)
+        cor_pis = tuple(CornerPieces(get_pc(0, 2, i, m, n), get_pc('', 1, i, m, n)) for i, m, n in cor_grp)
+        edg_pis = tuple(EdgePieces(get_pc(0, 2, i, j), get_pc('', 1, i, j)) for i, j in edg_grp)
+        cet_pis = tuple(CenterPieces(get_pc(0, 2, i), get_pc('', 1, i)) for i in cet_grp)
+
+        return cor_pis + edg_pis + cet_pis
+
+    def turn(self, ins_str):
+        for _pieces in self.all_pieces:
+            _pieces.turn(ins_str)
+
+
 if __name__ == '__main__':
-    crn = CenterPieces()
-    crn.position = (0, 0, 1)
-    crn.color = ('r', '', '')
-    crn.turn("M'")
-    print(crn.position)
-    print(crn.color)
+    # crn = CenterPieces((0, 0, 1), ('u', '', ''))
+    # crn = CenterPieces((0, 1, 0), ('', 'd', ''))
+    # crn.turn("D'")
+    # print(crn.position)
+    # print(crn.color)
+
+    rbk = RubikS()
+    a_p1 = set()
+    count = 1
+    for pieces in rbk.all_pieces:
+        print(f"pieces: {count}")
+        a_p1.add(pieces.position)
+        print(pieces.position)
+        print(pieces.color)
+        count += 1
+    print('-' * 20)
+
+    count = 1
+    equation_str = "R'-U'-R-U'-R'-U'-U'-R-U'-"
+    equation_str += "L-U-L'-U-L-U'-U'-L'-U-"
+    equation_str += "L-U-L'-U-L-U'-U'-L'-U-"
+    equation_str += "R'-U'-R-U'-R'-U'-U'-R-U'"
+    all_ins = equation_str.split('-')
+    for ins_ in all_ins:
+        rbk.turn(ins_)
+    a_p = set()
+    for pieces in rbk.all_pieces:
+        print(f"pieces: {count}")
+        a_p.add(pieces.position)
+        print(pieces.position)
+        print(pieces.color)
+        count += 1
+    print(a_p)
+    print(a_p1)
+    if a_p == a_p1:
+        print('yes')
+    print(len(a_p))

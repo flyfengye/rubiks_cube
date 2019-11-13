@@ -3,9 +3,11 @@ def get_judge_tb(_src_list):
     _tb['clockwise'] = tuple((i, 1) for i in _src_list[0].split('|'))  # 最后写成生成器对象看效率,生成器无法相加
     _tb['clockwise'] += tuple((i, 0) for i in _src_list[1].split('|'))
     _tb['clockwise'] += tuple((i, -1) for i in _src_list[2].split('|'))
-    _tb['anticlockwise'] = tuple((i.rstrip("'"), n) if "'" in i else (i + "'", n) for i, n in _tb['clockwise'])
+    _tb['clockwise'] = set(_tb['clockwise'])
+    _tb['anticlockwise'] = set((i.rstrip("'"), n) if "'" in i else (i + "'", n) for i, n in _tb['clockwise'])
     _tb['turn_twice'] = tuple((i + "2", n) for i, n in _tb['clockwise'])
     _tb['turn_twice'] += tuple((i + "2", n) for i, n in _tb['anticlockwise'])
+    _tb['turn_twice'] = set(_tb['turn_twice'])
     return _tb
 
 
