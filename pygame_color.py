@@ -4,7 +4,8 @@ from pygame import Surface
 
 pygame.init()
 
-screen = pygame.display.set_mode((800, 400))
+size = (1000, 500)
+screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Pygame图形绘制")
 
 YELLOW = 255, 255, 0
@@ -16,15 +17,16 @@ WHITE = 255, 255, 255
 
 LINEN = 250, 240, 230
 
-size = (600, 400)
+
 surface = Surface(size)
-surface.set_colorkey((0, 0, 0))
+# surface.set_colorkey((0, 0, 0))
 # surface.set_alpha(200)
 
 color_dict = {'u': YELLOW, 'd': WHITE, 'r': BLUE, 'l': GREEN, 'f': ORANGE, 'b': RED}
 pos = (1, 1, 1)
 color = ('u', 'b', 'r')
 
+# 1.角块坐标转换，
 
 class DrawRubikS:
     def __init__(self, pos_color_tuple):
@@ -49,9 +51,14 @@ class DrawRubikS:
 # p4poly = pygame.draw.polygon(surface, LINEN, [(600, 200), (490, 190), (490, 340), (600, 350)], 0)  #
 # p5poly = pygame.draw.polygon(surface, LINEN, [(600, 200), (200, 300), (250, 250), (150, 250)], 0)
 # p6poly = pygame.draw.polygon(surface, LINEN, [(150, 150), (150, 250), (250, 250), (250, 150)], 0)
-p0poly = pygame.draw.polygon(surface, YELLOW, [(600, 200), (450, 150), (450, 350), (600, 400)], 0)
-p1poly = pygame.draw.polygon(surface, ORANGE, [(600, 200), (750, 150), (750, 350), (600, 400)], 0)
-p2poly = pygame.draw.polygon(surface, BLUE, [(600, 200), (450, 150), (600, 100), (750, 150)], 0)
+p0poly = pygame.draw.polygon(surface, LINEN, [(600, 200), (450, 150), (600, 100), (750, 150)], 0)
+p1poly = pygame.draw.polygon(surface, LINEN, [(600, 200), (450, 150), (450, 350), (600, 400)], 0)
+p2poly = pygame.draw.polygon(surface, LINEN, [(600, 200), (750, 150), (750, 350), (600, 400)], 0)
+
+p0poly = pygame.draw.polygon(surface, YELLOW, [(600, 195), (465, 150), (600, 105), (735, 150)], 0)
+p1poly = pygame.draw.polygon(surface, ORANGE, [(592.5, 210), (457.5, 162.5), (457.5, 342.5), (592.5, 390)], 0)
+p2poly = pygame.draw.polygon(surface, BLUE, [(607.5, 210), (742.5, 162.5), (742.5, 342.5), (607.5, 390)], 0)
+
 screen.blit(surface, (0, 0))
 
 
