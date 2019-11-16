@@ -12,6 +12,7 @@ class B(A):
         self.__a()
         print('_a')
 
+
 B()._a()
 # http://baijiahao.com/s?id=1586020045412885527&wfr=spider&for=pc
 # https://ruwix.com/the-rubiks-cube/how-to-solve-the-rubiks-cube-beginners-method/
