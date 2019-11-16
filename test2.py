@@ -7,41 +7,17 @@ class DrawRubikS:
     def add_all_cube(self):
         cps = self.center_point(1)
         cps = dict(cps)
-        order_26 = [
-            (-1, 1, -1),
-            (0, 1, -1),
-            (1, 1, -1),
-            (-1, 0, -1),
-            (0, 0, -1),
-            (1, 0, -1),
-            (-1, -1, -1),
-            (0, -1, -1),
-            (1, -1, -1),
 
-            (-1, 1, 0),
-            (0, 1, 0),
-            (1, 1, 0),
-            (-1, 0, 0),
-            # (0, 0, 0),
-            (1, 0, 0),
-            (-1, -1, 0),
-            (0, -1, 0),
-            (1, -1, 0),
+        src = [(-1, 0, 1), (1, 0, -1)]
+        order_26 = []
+        for k in src[0]:
+            for j in src[1]:
+                for i in src[0]:
+                    order_26.append((i, j, k))
 
-            (-1, 1, 1),
-            (0, 1, 1),
-            (1, 1, 1),
-            (-1, 0, 1),
-            (0, 0, 1),
-            (1, 0, 1),
-            (-1, -1, 1),
-            (0, -1, 1),
-            (1, -1, 1),
-
-        ]
-
+        order_26.remove((0, 0, 0))
         for p in order_26:
-            print(cps[p])
+            # print(cps[p])
             yield self.get_cube_face_pos(cps[p])
 
     def get_cube_face_pos(self, cp):
@@ -59,7 +35,7 @@ class DrawRubikS:
         return six_face
 
     def get_cube_color_pos(self):
-
+        pass
 
     def center_point(self, pos_color):
         center_pos = (900, 300)
