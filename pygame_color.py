@@ -16,13 +16,14 @@ RED = 255, 0, 0
 WHITE = 255, 255, 255
 
 LINEN = 150, 150, 150
+GREY = 130, 130, 130
 
 
 surface = Surface(size)
 # surface.set_colorkey((0, 0, 0))
 # surface.set_alpha(200)
 
-color_dict = {'u': YELLOW, 'd': WHITE, 'r': BLUE, 'l': GREEN, 'f': ORANGE, 'b': RED}
+color_dict = {'u': YELLOW, 'd': WHITE, 'r': BLUE, 'l': GREEN, 'f': ORANGE, 'b': RED, '': GREY}
 pos = (1, 1, 1)
 color = ('u', 'b', 'r')
 
@@ -55,7 +56,7 @@ color = ('u', 'b', 'r')
 
 
 clock = pygame.time.Clock()
-clock.tick(30)
+clock.tick(1)
 # pa_time = clock.tick()
 # print(pa_time)
 sur_pos = (0, 0)
@@ -63,6 +64,17 @@ cut = 0
 speed = 10
 import time
 s_time = time.time()
+
+import test1
+count_turn = 0
+rbk_obj = test1.RubikS()
+equation_str = "R'-U'-R-U'-R'-U'-U'-R-U'-"
+equation_str += "L-U-L'-U-L-U'-U'-L'-U-"
+equation_str += "L-U-L'-U-L-U'-U'-L'-U-"
+equation_str += "R'-U'-R-U'-R'-U'-U'-R-U'"
+all_ins = equation_str.split('-')
+
+
 while True:
     if sur_pos[0] <=0 and sur_pos[1] <= 0 and cut > 0:
         e_time = time.time()
@@ -74,22 +86,28 @@ while True:
             sys.exit()
 
 
-
-    color_order = list(color_dict.values())
     import test2
 
-    dr = test2.DrawRubikS(1)
-    all = dr.add_all_cube()  # 如何从生成器指定位置获取值，前面的丢弃不用
+
+    clock.tick(3)
+
+    # for ins_ in all_ins:
+    rbk_obj.turn(all_ins[count_turn])
+    if count_turn == 36:
+        input()
+    count_turn += 1
+    dr = test2.DrawRubikS(rbk_obj)
+    all_cube = dr.add_all_cube()  # 如何从生成器指定位置获取值，前面的丢弃不用
     count = 0
     max = 26
-    for xx in all:
+    for fp6, fc6 in all_cube:
         count += 1
         if count > max:
             break
 
         i = 0
-        for x in xx:
-            pygame.draw.polygon(surface, color_order[i], x, 0)
+        for fp in fp6:
+            pygame.draw.polygon(surface, color_dict[fc6[i]], fp, 0)
             i += 1
     screen.blit(surface, sur_pos)
 

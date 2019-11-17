@@ -13,7 +13,10 @@ class B(A):
         print('_a')
 
 
-B()._a()
+# B()._a()
+for i, j in (1, 2, 3), (4, 5, 6):
+    print(i)
+    print(i)
 # http://baijiahao.com/s?id=1586020045412885527&wfr=spider&for=pc
 # https://ruwix.com/the-rubiks-cube/how-to-solve-the-rubiks-cube-beginners-method/
 # 魔方小站 http://www.rubik.com.cn/notation.htm
@@ -26,3 +29,4 @@ B()._a()
 # 6.写主类，先实例化一个魔方类(已改进)
 # 7.动画
 # 8.静态时对应色（当前） 接收魔方原始对象，原始坐标对应颜色映射表，通过原始坐标索引颜色，堆小方块顺序函数输出包含颜色
+# 9.
