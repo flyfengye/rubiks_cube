@@ -1,16 +1,39 @@
 class DrawRubikS:
     def __init__(self, rubik_obj):
-        self.all_pieces = rubik_obj.all_pieces
-        self.cs = {cube.position: cube.color for cube in self.all_pieces}
+        self.all_pieces = rubik_obj.all_pieces  # 若只有单函数使用则移至该函数
+        self.old_pcs = []
+        self.new_pcs = []
 
     def add_all_action(self):
         # 转动层所有块的坐标改变
+        # 获取起点对应终点坐标，计算轨迹
+        # 先绘制一个角块尝试
+        idx = 0
+        tmp_old_pcs = []
+        tmp_new_pcs = []
+        for old_pc in self.old_pcs:
+            if self.new_pcs[idx][1] != old_pc[1]:  # 字典索引速度和列表idx索引速度那个快？
+                tmp_old_pcs.append(old_pc)
+                tmp_new_pcs.append(self.new_pcs[idx])
+
+        xxx
+        # 先堆不动块，
+        # 直接动块进行轨迹生产,动块要判断堆放顺序
+        # 动块终点坐标对应出来
+        # 最好在循环中就把动作pcs添加起来
+
+
+    def bak_pcs(self):
+        self.old_pcs = self.new_pcs.copy()
 
     def add_all_cube(self):
+        self.new_pcs = []
+
         cps = self.center_point(1)
         cps = dict(cps)
 
-        cs = self.cs  # position:color of all
+        cs = {cube.position: cube.color for cube in self.all_pieces}
+        # position:color of all
 
         src = [(-1, 0, 1), (1, 0, -1)]
         order_26 = []
@@ -22,7 +45,9 @@ class DrawRubikS:
         order_26.remove((0, 0, 0))
         for p in order_26:
             # print(cps[p])
-            yield self.get_cube_face_pos(cps[p]), self.get_cube_face_color(p, cs[p])
+            pc = self.get_cube_face_pos(cps[p]), self.get_cube_face_color(p, cs[p])
+            self.new_pcs.append(pc)
+            yield pc
 
     @staticmethod
     def get_cube_face_color(pos, color):

@@ -39,7 +39,7 @@ class CornerPieces:
         x, y, z = self.position
         xy, xz, yz = self.color
 
-        if ins_strip in ('U', 'D', 'E', 'u', 'd', 'y'):
+        if ins_strip in ('U', 'D', 'E', 'u', 'd', 'y'):  # 这里是否每次新建元组拖cpu
             if (x, y) != (0, 0):  # 中心块pos不改变
                 res = self.__judge(UD, (x, y), z, (xz, yz))
                 if res:

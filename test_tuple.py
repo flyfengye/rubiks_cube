@@ -14,9 +14,11 @@ class B(A):
 
 
 # B()._a()
-for i, j in (1, 2, 3), (4, 5, 6):
-    print(i)
-    print(i)
+a = (1, [3])
+print(id(a))
+a[1][0] = 2
+print(a)
+print(id(a))
 # http://baijiahao.com/s?id=1586020045412885527&wfr=spider&for=pc
 # https://ruwix.com/the-rubiks-cube/how-to-solve-the-rubiks-cube-beginners-method/
 # 魔方小站 http://www.rubik.com.cn/notation.htm

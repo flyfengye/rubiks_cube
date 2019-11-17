@@ -65,9 +65,12 @@ speed = 10
 import time
 s_time = time.time()
 
+import test2
 import test1
 count_turn = 0
 rbk_obj = test1.RubikS()
+dr = test2.DrawRubikS(rbk_obj)
+
 equation_str = "R'-U'-R-U'-R'-U'-U'-R-U'-"
 equation_str += "L-U-L'-U-L-U'-U'-L'-U-"
 equation_str += "L-U-L'-U-L-U'-U'-L'-U-"
@@ -86,7 +89,7 @@ while True:
             sys.exit()
 
 
-    import test2
+    # import test2
 
 
     clock.tick(3)
