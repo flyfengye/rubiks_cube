@@ -54,7 +54,6 @@ color = ('u', 'b', 'r')
 
 
 
-
 clock = pygame.time.Clock()
 clock.tick(1)
 # pa_time = clock.tick()

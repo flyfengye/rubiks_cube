@@ -17,10 +17,31 @@ class DrawRubikS:
                 tmp_new_pcs.append(self.new_pcs[idx])
 
         xxx
+
+        (e, f, g, h) 1
+        (a, b, f, e) 2
+        (d, a, e, h) 3
+        (b, c, g, f) 4
+        (c, d, h, g) 5
+        (a, b, c, d) 6
+
+
+        (a, b, c, d)
+        (e, f, g, h)
+
+        (a, b, c, d)
+        (e, a, b, h)
+
+        (_a, _b, _c, _d) = (1, 2, 3, 4)
+        (_e, _f, _g, _h) = (5, 6, 7, 8)
+        (a, b, c, d) = (_e, _f, _a, _b)
+        (e, f, g, h) = ()
         # 先堆不动块，
         # 直接动块进行轨迹生产,动块要判断堆放顺序
-        # 动块终点坐标对应出来
+        # 动块终点坐标对应出来，根据turn判定，（当前）
+        # 计算椭圆轨迹角度，生成新坐标
         # 最好在循环中就把动作pcs添加起来
+        # 动画时颜色还是按照old添，但是到了一定角度，需改变堆放pos和color的顺序
 
 
     def bak_pcs(self):
