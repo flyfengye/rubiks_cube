@@ -1,4 +1,4 @@
-print((*(1, 2), 3))
+
 class A:
     def __init__(self):
         pass
@@ -14,11 +14,29 @@ class B(A):
 
 
 # B()._a()
-a = (1, [3])
-print(id(a))
-a[1][0] = 2
-print(a)
-print(id(a))
+import math
+# x1, y1 = x-x0, y-y0
+# x2, y2 = x-x0, y-y0
+x1, y1 = 0.5, 0.75
+x2, y2 = -0.5, 1.25
+c = math.sqrt((3-2*math.sqrt(2))/6)
+d = math.sqrt((3+2*math.sqrt(2))/6)
+
+h, i, j, k = (c*x1-d*y1)**2, (d*x1+c*y1)**2, (c*x2-d*y2)**2, (d*x2+c*y2)**2
+n = (j/h-1)/(j/h*i-k)
+m = (1-n*k)/j
+a, b = math.sqrt(1/m), math.sqrt(1/n)
+print(m)
+print(n)
+# e, f
+rag1 = range(1, int(math.pi*10/2), 1)
+for r in rag1:
+    e = math.cos(r/10)
+    f = math.sin(r/10)
+    x, y = a*c*e+b*d*f, b*f*(1+d**2)/c-a*d*e
+    print((x, y))
+
+
 
 # http://baijiahao.com/s?id=1586020045412885527&wfr=spider&for=pc
 # https://ruwix.com/the-rubiks-cube/how-to-solve-the-rubiks-cube-beginners-method/
