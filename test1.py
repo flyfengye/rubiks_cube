@@ -27,14 +27,14 @@ class CornerPieces:
                 one, two = two_color
                 return self.__planar_pos(planar_pos, clockwise=False), (two, one)
 
-        for m, n in judge_tb['turn_twice']:
-            if ins_str == m and third_pos == n:
-                _one, _two = planar_pos
-                return (-_one, -_two), two_color
+        # for m, n in judge_tb['turn_twice']:
+        #     if ins_str == m and third_pos == n:
+        #         _one, _two = planar_pos
+        #         return (-_one, -_two), two_color
 
     def turn(self, ins_str):
         self.ins_str = ins_str
-        ins_strip = ins_str.strip("2'")
+        ins_strip = ins_str.strip("2'")  # 转动两次情况在主类进行拆分
 
         x, y, z = self.position
         xy, xz, yz = self.color
@@ -77,28 +77,6 @@ class CornerPieces:
         else:
             return pos_order[(pos_order.index(pos) - turn_count) % 4]
 
-    def __check_ins_str(self, ins_str):  # 后面在主类检查
-        """指定字母、单引号、数字2，最多各1个"""
-        ins_str = ins_str.strip()
-        if len(ins_str) > 3:
-            raise Exception('ins_str length > 3')
-
-        ins_all = ('U', 'D', 'E', 'u', 'd', 'y', 'R', 'L', 'M', 'r', 'l', 'x', 'B', 'F', 'S', 'b', 'f', 'z')
-
-        if len([i for i in ins_all if i in ins_str]) > 1:
-            raise Exception('ins_str 字母 > 1')
-
-        if ins_str.count("'") > 1:
-            raise Exception('ins_str 单引号 > 1')
-
-        if ins_str.count("2") > 1:
-            raise Exception('ins_str 数字2 > 1')
-
-        for ins_s in ins_str:
-            if ins_s not in ins_all and ins_s not in ("'", '2'):
-                raise Exception('ins_str 含有其它字符')
-        self.ins_str = ins_str
-
 
 class EdgePieces(CornerPieces):
     pos_order = ((1, 0), (0, -1), (-1, 0), (0, 1))
@@ -111,6 +89,7 @@ class CenterPieces(EdgePieces):
 class RubikS:
     def __init__(self):
         self.all_pieces = self.__init_all_pieces()
+        self.ins_str = ''
 
     @staticmethod
     def __init_all_pieces():
@@ -138,8 +117,32 @@ class RubikS:
         return cor_pis + edg_pis + cet_pis
 
     def turn(self, ins_str):
+        self.ins_str = self.__check_ins_str(ins_str) # 下面再加判断是否含有2有则拆分，U2 U-U
         for _pieces in self.all_pieces:
-            _pieces.turn(ins_str)
+            _pieces.turn(self.ins_str)
+
+    @staticmethod
+    def __check_ins_str(ins_str):
+        """指定字母、单引号、数字2，最多各1个"""
+        ins_str = ins_str.strip()
+        if len(ins_str) > 3:
+            raise Exception('ins_str length > 3')
+
+        ins_all = ('U', 'D', 'E', 'u', 'd', 'y', 'R', 'L', 'M', 'r', 'l', 'x', 'B', 'F', 'S', 'b', 'f', 'z')
+
+        if len([i for i in ins_all if i in ins_str]) > 1:
+            raise Exception('ins_str 字母 > 1')
+
+        if ins_str.count("'") > 1:
+            raise Exception('ins_str 单引号 > 1')
+
+        if ins_str.count("2") > 1:
+            raise Exception('ins_str 数字2 > 1')
+
+        for ins_s in ins_str:
+            if ins_s not in ins_all and ins_s not in ("'", '2'):
+                raise Exception('ins_str 含有其它字符')
+        return ins_str
 
 
 if __name__ == '__main__':

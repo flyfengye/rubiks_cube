@@ -1,40 +1,41 @@
 
-class A:
-    def __init__(self):
-        pass
-
-    def __a(self):
-        print('_a')
-
-class B(A):
-
-    def _a(self):
-        self.__a()
-        print('_a')
-
-
-# B()._a()
 import math
+ox, oy = 1, 1
 # x1, y1 = x-x0, y-y0
 # x2, y2 = x-x0, y-y0
 x1, y1 = 0.5, 0.75
 x2, y2 = -0.5, 1.25
 c = math.sqrt((3-2*math.sqrt(2))/6)
 d = math.sqrt((3+2*math.sqrt(2))/6)
+# print(c)
+# print(d)
 
 h, i, j, k = (c*x1-d*y1)**2, (d*x1+c*y1)**2, (c*x2-d*y2)**2, (d*x2+c*y2)**2
 n = (j/h-1)/(j/h*i-k)
 m = (1-n*k)/j
 a, b = math.sqrt(1/m), math.sqrt(1/n)
-print(m)
-print(n)
+# print(m)
+# print(n)
 # e, f
-rag1 = range(1, int(math.pi*10/2), 1)
+rag1 = range(1, int(math.pi*10/2), 1) # 抛弃，按x范围分段
 for r in rag1:
     e = math.cos(r/10)
     f = math.sin(r/10)
-    x, y = a*c*e+b*d*f, b*f*(1+d**2)/c-a*d*e
+    x, y = a*c*e+b*d*f, b*c*f-a*d*e
     print((x, y))
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

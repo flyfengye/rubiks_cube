@@ -1,8 +1,12 @@
+from check_tuple import UD, RL, FB
+
+
 class DrawRubikS:
     def __init__(self, rubik_obj):
+        self.rubik_obj = rubik_obj
         self.all_pieces = rubik_obj.all_pieces  # 若只有单函数使用则移至该函数
         self.old_pcs = []
-        self.new_pcs = []
+        self.new_pcs = self.add_all_cube()
 
     def add_all_action(self):
         # 转动层所有块的坐标改变
@@ -11,26 +15,30 @@ class DrawRubikS:
         idx = 0
         tmp_old_pcs = []
         tmp_new_pcs = []
-        for old_pc in self.old_pcs:
-            if self.new_pcs[idx][1] != old_pc[1]:  # 字典索引速度和列表idx索引速度那个快？
-                tmp_old_pcs.append(old_pc)
-                tmp_new_pcs.append(self.new_pcs[idx])
+        for new_pc in self.new_pcs:
+            old_pc = self.old_pcs[idx]
+            if new_pc[1] != old_pc[1]:  # 字典索引速度和列表idx索引速度那个快？
+                tmp_old_pcs.append((self.vertex_reorder(old_pc[0]), old_pc[1]))
+                tmp_new_pcs.append(new_pc)
 
-        xxx
-
-        (e, f, g, h) 1
-        (a, b, f, e) 2
-        (d, a, e, h) 3
-        (b, c, g, f) 4
-        (c, d, h, g) 5
-        (a, b, c, d) 6
-
-
-        (a, b, c, d)
-        (e, f, g, h)
-
-        (a, b, c, d)
-        (e, a, b, h)
+        # xxx
+        #
+        # (e, f, g, h) 1
+        # (a, b, f, e) 2
+        # (d, a, e, h) 3
+        # (b, c, g, f) 4
+        # (c, d, h, g) 5
+        # (a, b, c, d) 6
+        #
+        #
+        # (a, b, c, d)
+        # (e, f, g, h)
+        #
+        # (a, b, c, d)
+        # (e, a, b, h)
+        #
+        # a,b  e,f
+        # c,d  g,h
 
         (_a, _b, _c, _d) = (1, 2, 3, 4)
         (_e, _f, _g, _h) = (5, 6, 7, 8)
@@ -42,13 +50,45 @@ class DrawRubikS:
         # 计算椭圆轨迹角度，生成新坐标
         # 最好在循环中就把动作pcs添加起来
         # 动画时颜色还是按照old添，但是到了一定角度，需改变堆放pos和color的顺序
+    def vertex_reorder(self, old_pc_0):
+        ins_str_0 = self.rubik_obj.ins_str
+        ins_str = ins_str_0.strip("'")
 
+        (a, b, c, d) = old_pc_0[-1]
+        (e, f, g, h) = old_pc_0[0]
+
+        if ins_str in ('U', 'D', 'E', 'u', 'd', 'y'):
+            if any(m if m == ins_str_0 else '' for m, _ in UD['clockwise']):
+                us = (b, c, d, a)  # 是否有快速移位的方法
+                ds = (f, g, h, e)
+            else:
+                us = (d, a, b, c)
+                ds = (h, e, f, g)
+
+        elif ins_str in ('R', 'L', 'M', 'r', 'l', 'x'):
+            if any(m if m == ins_str_0 else '' for m, _ in RL['clockwise']):
+                us = (b, f, g, c)
+                ds = (a, e, h, d)
+            else:
+                us = (e, a, d, h)
+                ds = (f, b, c, g)
+
+        elif ins_str in ('B', 'F', 'S', 'b', 'f', 'z'):
+            if any(m if m == ins_str_0 else '' for m, _ in FB['clockwise']):
+                us = (e, f, b, a)
+                ds = (h, g, c, d)
+            else:
+                us = (d, c, g, h)
+                ds = (a, b, f, e)
+        else:
+            raise Exception('ins_str error')
+
+        return self.get_six_fp(us, ds)
 
     def bak_pcs(self):
         self.old_pcs = self.new_pcs.copy()
 
     def add_all_cube(self):
-        self.new_pcs = []
 
         cps = self.center_point(1)
         cps = dict(cps)
@@ -67,7 +107,7 @@ class DrawRubikS:
         for p in order_26:
             # print(cps[p])
             pc = self.get_cube_face_pos(cps[p]), self.get_cube_face_color(p, cs[p])
-            self.new_pcs.append(pc)
+            print(pc)
             yield pc
 
     @staticmethod
@@ -90,6 +130,10 @@ class DrawRubikS:
     def get_cube_face_pos(self, cp):
         # cp: the center point position of cube
         us, ds = self.vertex_pos(cp, 40 // 3 + 6)
+        return self.get_six_fp(us, ds)
+
+    @staticmethod
+    def get_six_fp(us, ds):
         a, b, c, d = us
         e, f, g, h = ds
         six_fp = list()  # d, l, b, f, r, u
@@ -100,9 +144,6 @@ class DrawRubikS:
         six_fp.append((c, d, h, g))
         six_fp.append(us)
         return six_fp  # six face position
-
-    def get_cube_color_pos(self):
-        pass
 
     def center_point(self, center_pos):
         center_pos = (900, 300)
