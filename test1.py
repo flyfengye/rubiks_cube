@@ -90,6 +90,7 @@ class RubikS:
     def __init__(self):
         self.all_pieces = self.__init_all_pieces()
         self.ins_str = ''
+        self.ins_axis = ''
 
     @staticmethod
     def __init_all_pieces():

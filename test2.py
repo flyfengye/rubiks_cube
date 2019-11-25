@@ -1,4 +1,7 @@
 from check_tuple import UD, RL, FB
+from test1 import CornerPieces
+from test1 import EdgePieces
+from test1 import CenterPieces
 
 
 class DrawRubikS:
@@ -6,20 +9,45 @@ class DrawRubikS:
         self.rubik_obj = rubik_obj
         self.all_pieces = rubik_obj.all_pieces  # 若只有单函数使用则移至该函数
         self.old_pcs = []
-        self.new_pcs = self.add_all_cube()
+
+    def get_cec(self):
+        ins_str = self.rubik_obj.ins_str.strip("'")
+        if ins_str in ('U', 'D', 'E', 'u', 'd', 'y'):
+            pos_md = (2, 1)
+        elif ins_str in ('R', 'L', 'M', 'r', 'l', 'x'):
+            pos_md = (0, 1)
+        elif ins_str in ('B', 'F', 'S', 'b', 'f', 'z'):
+            pos_md = (1, 1)
+        else:
+            raise Exception('ins_str error')
+        return pos_md
+
 
     def add_all_action(self):
         # 转动层所有块的坐标改变
         # 获取起点对应终点坐标，计算轨迹
         # 先绘制一个角块尝试
         idx = 0
-        tmp_old_pcs = []
-        tmp_new_pcs = []
-        for new_pc in self.new_pcs:
+        tmp_corner_pcs = []
+        tmp_edge_pcs = []
+        tmp_center_pc = ()
+        ct_pos = ''
+        for new_pc in self.add_all_cube():
             old_pc = self.old_pcs[idx]
-            if new_pc[1] != old_pc[1]:  # 字典索引速度和列表idx索引速度那个快？
-                tmp_old_pcs.append((self.vertex_reorder(old_pc[0]), old_pc[1]))
-                tmp_new_pcs.append(new_pc)
+            if new_pc != old_pc:  # 字典索引速度和列表idx索引速度那个快？
+                if 0 not in old_pc[2]:
+                    tmp_corner_pcs.append(old_pc)
+                elif old_pc[2].count(0) == 1:
+                    tmp_edge_pcs.append(old_pc)
+            if ()
+        tmp_center_pc = old_pc
+        cn_order = CornerPieces.pos_order
+        eg_order = EdgePieces.pos_order
+        ct_order = CenterPieces.pos_order
+        for corner_pc in tmp_corner_pcs
+
+
+
 
         # xxx
         #
@@ -90,7 +118,7 @@ class DrawRubikS:
 
     def add_all_cube(self):
 
-        cps = self.center_point(1)
+        cps = self.center_point()
         cps = dict(cps)
 
         cs = {cube.position: cube.color for cube in self.all_pieces}
@@ -106,7 +134,7 @@ class DrawRubikS:
         order_26.remove((0, 0, 0))
         for p in order_26:
             # print(cps[p])
-            pc = self.get_cube_face_pos(cps[p]), self.get_cube_face_color(p, cs[p])
+            pc = self.get_cube_face_pos(cps[p]), self.get_cube_face_color(p, cs[p]), p
             print(pc)
             yield pc
 
@@ -145,9 +173,8 @@ class DrawRubikS:
         six_fp.append(us)
         return six_fp  # six face position
 
-    def center_point(self, center_pos):
+    def center_point(self):
         center_pos = (900, 300)
-
         # [(600, 200), (450, 150), (600, 100), (750, 150)],
         # [(600, 200), (450, 150), (450, 350), (600, 400)],
         # [(600, 200), (750, 150), (750, 350), (600, 400)],
